@@ -8,6 +8,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { AnimatePresence } from "framer-motion";
 
 import stylesheet from "~/tailwind.css";
 
@@ -26,7 +27,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <AnimatePresence mode="wait">
+          <Outlet />
+        </AnimatePresence>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
