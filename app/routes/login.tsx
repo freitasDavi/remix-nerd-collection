@@ -6,8 +6,8 @@ import { createUserSession, getUserId } from "~/session.server";
 import { safeRedirect, validateEmail } from "~/utils";
 import { motion } from "framer-motion";
 import { Input } from "~/components/Input";
-import { AppError } from "~/lib/errors/AppError";
 import { login } from "~/features/Auth/auth.api";
+import { LoginError } from "~/lib/errors/LoginError";
 
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -61,6 +61,7 @@ export const action = async ({ request }: ActionArgs) => {
     request,
     userId: user.id,
   });
+
 }
 
 export default function LoginPage() {
@@ -164,30 +165,34 @@ export default function LoginPage() {
 export function ErrorBoundary() {
   const error = useRouteError();
 
-  console.error(error);
+  console.log("Socorro");
+  console.log(error instanceof Error);
+  console.log("Não deu");
 
   if (isRouteErrorResponse(error)) {
     return (
       <div>
-        <h1>
+        <h1 className="text-red-500 font-bold">
           {error.status} {error.statusText}
         </h1>
         <p>{error.data}</p>
       </div>
     )
-  } else if (error instanceof AppError) {
+  }
+  else if (error instanceof LoginError) {
     return (
       <div>
-        <h1>
+        <h1 className="text-blue-500 font-bold ">
           Opa!
         </h1>
         <p>{error.message}</p>
       </div>
     )
-  } else if (error instanceof Error) {
+  }
+  else if (error instanceof Error) {
     return (
       <div>
-        <h1>Error</h1>
+        <h1 className="text-red-500">Error</h1>
         <p>{error.message}</p>
         <p>The stack trace is:</p>
         <pre>{error.stack}</pre>

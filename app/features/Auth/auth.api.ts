@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { db } from "~/db";
-import bcrypt from "bcrypt";
+import { compare } from "bcryptjs";
 import { LoginError } from "~/lib/errors/LoginError";
 
 
@@ -22,10 +22,10 @@ export async function login(values: LoginInput) {
         throw new LoginError();
     }
 
-    const passwordIsValid = await bcrypt.compare(values.password, user.password);
+    const passwordIsValid = await compare(values.password, user.password);
 
     if (!passwordIsValid) {
-        throw new LoginError();
+        throw new Error("Erro ao realizar login");
     }
 
     return user;
